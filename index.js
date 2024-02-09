@@ -1,12 +1,17 @@
 import express from "express";
+import dotenv from "dotenv";
+import { dbConnect } from "./src/db/db-connect.js";
 
-require("dotenv").config({ path: "./.env" });
+dotenv.config({ path: "./.env" });
 
 const app = express();
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-app.listen(3000 || process.env.PORT, () => {
+dbConnect()
+
+const port = process.env.PORT;
+app.listen(3000 || port, () => {
   console.log(`Example app listening on port ${port}`);
 });
