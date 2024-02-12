@@ -9,7 +9,10 @@ app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-dbConnect()
+dbConnect();
+
+import router from "./src/routes/user.route.js";
+app.use("api/v1/", router)
 
 const port = process.env.PORT;
 app.listen(3000 || port, () => {

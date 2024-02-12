@@ -1,17 +1,17 @@
 import { Sequelize } from "sequelize";
 import { dbConfig } from "../config/db_config.js";
 
-const dbConnect = async () => {
-  const sequelize = new Sequelize(
-    dbConfig.database,
-    dbConfig.user,
-    dbConfig.password,
-    {
-      host: dbConfig.host,
-      dialect: "postgres",
-    }
-  );
+const sequelize = new Sequelize(
+  dbConfig.database,
+  dbConfig.user,
+  dbConfig.password,
+  {
+    host: dbConfig.host,
+    dialect: "postgres",
+  }
+);
 
+const dbConnect = async () => {
   try {
     await sequelize.authenticate();
     console.log("Connection has been established successfully.");
@@ -20,4 +20,4 @@ const dbConnect = async () => {
   }
 };
 
-export { dbConnect };
+export { dbConnect , sequelize};
