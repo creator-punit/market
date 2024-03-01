@@ -4,15 +4,11 @@ import { sequelize } from "../db-connect.js";
 const User = sequelize.define(
   "User",
   {
-    user_id: {
-      type: DataTypes.STRING,
-      allowNull: false,
-    },
-    firstName: {
+    firstname: {
       type: DataTypes.STRING,
       // allowNull: false,
     },
-    lastName: {
+    lastname: {
       type: DataTypes.STRING,
     },
     phone: {
@@ -29,23 +25,26 @@ const User = sequelize.define(
     },
     cart_id: {
       type: DataTypes.STRING,
-      references: {
-        model: Cart,
-        key: "cart_id",
-      },
+      // references: {
+      //   model: Cart,
+      //   key: "cart_id",
+      // },
     },
     history_id: {
       type: DataTypes.STRING,
-      references: {
-        model: History,
-        key: "history_id",
-      },
+      // references: {
+      //   model: History,
+      //   key: "history_id",
+      // },
     },
   },
   {
     // Other model options go here
     timestamps: true,
+    id: "user_id",
   }
 );
+
+await User.sync();
 
 export { User };
