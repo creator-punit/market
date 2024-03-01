@@ -4,13 +4,13 @@ import {
   updateUser,
   loginUser,
   deleteUser,
-} from "../controllers/user.controller";
+} from "../controllers/user.controller.js";
 
 const router = Router();
 
-router.route("user").post(registerUser);
-router.route("user").put(updateUser);
-router.route("user").get(loginUser);
-router.route("user").delete(deleteUser);
+router.route("/user").post(registerUser);
+router.route("/user").put(updateUser);
+router.route("/user").get(loginUser);
+router.route("/user").delete(deleteUser);
 
 export default router;
