@@ -36,6 +36,7 @@ const registerUser = async (req, res) => {
     };
     const createdUser = await User.create(user);
 
+    console.log(createdUser, "----------------------");
     if (!createdUser) {
       res.status(500).send({
         status: 0,
@@ -51,7 +52,66 @@ const registerUser = async (req, res) => {
 };
 
 const loginUser = async (req, res) => {
-  const { phone, email, password } = req.body;
+  try {
+    const { phone, email, password } = req.body;
+
+    if (!phone && !email) {
+      res.send({
+        status: 0,
+        message: "user phone number or email required",
+      });
+    }
+
+    let where;
+
+    if (phone) {
+      where = {
+        phone,
+      };
+    } else {
+      where = {
+        email,
+      };
+    }
+
+    const exist = await User.findAll(where);
+
+    if (!exist) {
+      res.send({
+        status: 0,
+        message: "No account exists with the given credentials",
+      });
+    }
+const user = exist[0].dataValues;
+    await bcrypt.compare(
+      password,
+      exist[0].dataValues.password,
+      async function (err, result) {
+        if (!result) {
+          res.send({
+            status: 0,
+            message: "The entered password is incorrect",
+          });
+        }
+      }
+    );
+
+    const userDetails = {
+      name: user.firstname + " " + user.lastname,
+      phone: user.phone,
+      email: user.email,
+      cart: user.cart_id,
+      history: user.history_id,
+    };
+
+    res.send({
+      status: 1,
+      userDetails,
+      message: "User successfully loggedIn",
+    });
+  } catch (error) {
+    throw error;
+  }
 };
 const updateUser = async (req, res) => {
   const { phone, email, password } = req.body;
