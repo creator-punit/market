@@ -20,8 +20,10 @@ app.get("/", (req, res) => {
 
 dbConnect();
 
-import router from "./src/routes/user.route.js";
-app.use("/api/v1", router);
+import {router as userRouter} from "./src/routes/user.route.js";
+import { router as productRouter } from "./src/routes/product.route.js";
+app.use("/api/v1", userRouter, productRouter);
+// app.use("/api/v1", productRouter);
 
 const port = process.env.PORT || 8000;
 app.listen(port, () => {
