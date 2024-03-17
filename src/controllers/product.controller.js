@@ -89,6 +89,33 @@ const getProduct = async (req, res) => {
 
 const updateProduct = async (req, res) => {};
 
-const deleteProduct = async (req, res) => {};
+const deleteProduct = async (req, res) => {
+  try {
+    const { prod_id } = req.headers;
+
+    if (!prod_id) {
+      return res.send({
+        status: 0,
+        message: "no product id found",
+      });
+    }
+
+    const deletedProduct = await Product.destroy({ where: { prod_id } });
+
+    if (!deletedProduct) {
+      return res.send({
+        status: 0,
+        message: "no product found",
+      });
+    }
+
+    res.send({
+      status: 1,
+      message: "product details deleted successfully",
+    });
+  } catch (error) {
+    throw error;
+  }
+};
 
 export { registerProduct, getProduct, updateProduct, deleteProduct };
