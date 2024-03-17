@@ -47,7 +47,45 @@ const registerProduct = async (req, res) => {
     throw error;
   }
 };
-const getProduct = async (req, res) => { };
+const getProduct = async (req, res) => {
+  try {
+    const { prod_id } = req.headers;
+
+    if (!prod_id) {
+      return res.send({
+        status: 0,
+        message: "no product id found",
+      });
+    }
+
+    const exist = await Product.findByPk(prod_id);
+
+    if (!exist) {
+      return res.send({
+        status: 0,
+        message: "no product found",
+      });
+    }
+
+    const productDetails = {
+      prod_id: exist.prod_id,
+      prod_name: exist.prod_name,
+      prod_description: exist.prod_description,
+      prod_listing_price: exist.prod_listing_price,
+      prod_selling_price: exist.prod_selling_price,
+      discount: exist.discount,
+      prod_media_id: exist.prod_media_id,
+    };
+
+    res.send({
+      status: 1,
+      productDetails,
+      message: "product details found successfully",
+    });
+  } catch (error) {
+    throw error;
+  }
+};
 
 const updateProduct = async (req, res) => {};
 
