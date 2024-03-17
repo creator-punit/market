@@ -20,8 +20,8 @@ app.get("/", (req, res) => {
 
 dbConnect();
 
-import {router as userRouter} from "./src/routes/user.route.js";
-import { router as productRouter } from "./src/routes/product.route.js";
+import {default as userRouter} from "./src/routes/user.route.js";
+import { default as productRouter } from "./src/routes/product.route.js";
 app.use("/api/v1", userRouter, productRouter);
 // app.use("/api/v1", productRouter);
 

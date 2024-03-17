@@ -4,6 +4,11 @@ import { sequelize } from "../db-connect.js";
 const User = sequelize.define(
   "User",
   {
+    user_id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey:true
+    },
     firstname: {
       type: DataTypes.STRING,
       // allowNull: false,

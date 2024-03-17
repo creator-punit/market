@@ -1,38 +1,36 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../db-connect.js";
+import { User } from "./user.model.js";
 
 const Product = sequelize.define(
   "Product",
   {
+    prod_id: {
+      type: DataTypes.INTEGER,
+      autoIncrement: true,
+      primaryKey: true,
+    },
     prod_name: {
       type: DataTypes.STRING,
       // allowNull: false,
     },
     prod_description: {
-      type: DataTypes.STRING,
+      type: DataTypes.TEXT,
     },
     prod_listing_price: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       // allowNull: false,
     },
     prod_selling_price: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       // allowNull: false,
     },
     discount: {
-      type: DataTypes.STRING,
-      // allowNull: false,
-    },
-    discount: {
-      type: DataTypes.STRING,
-      // allowNull: false,
-    },
-    discount: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       // allowNull: false,
     },
     user_id: {
-      type: DataTypes.STRING,
+      type: DataTypes.INTEGER,
       references: {
         model: User,
         key: "user_id",
@@ -40,10 +38,10 @@ const Product = sequelize.define(
     },
     prod_media_id: {
       type: DataTypes.STRING,
-    //   references: {
-    //     model: User,
-    //     key: "user_id",
-    //   },
+      //   references: {
+      //     model: User,
+      //     key: "user_id",
+      //   },
     },
   },
   {
@@ -53,6 +51,6 @@ const Product = sequelize.define(
   }
 );
 
-await Product.sync();
+await Product.sync({force:true});
 
 export { Product };

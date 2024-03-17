@@ -3,7 +3,7 @@ import bcrypt from "bcrypt";
 import { User } from "../db/models/user.model.js";
 
 const registerUser = async (req, res) => {
-  console.log(req.body, "-------------------1");
+
   const { firstname, lastname, phone, email, password } = req.body;
 
   if (!firstname && !lastname && !phone && !email && !password) {
@@ -73,7 +73,7 @@ const loginUser = async (req, res) => {
       };
     }
 
-    const exist = await User.findAll({where});
+    const exist = await User.findAll({ where });
 
     if (!exist.length) {
       res.send({
@@ -135,7 +135,7 @@ const deleteUser = async (req, res) => {
       };
     }
 
-    const exist = await User.findAll({where});
+    const exist = await User.findAll({ where });
 
     if (!exist.length) {
       return res.send({
