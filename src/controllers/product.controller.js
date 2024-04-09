@@ -58,23 +58,29 @@ const getProduct = async (req, res) => {
       });
     }
 
-    const exist = await Product.findByPk(prod_id);
+    const exist = await Product.findAll({
+      attributes: [
+        "prod_name",
+        "prod_description",
+        "prod_listing_price",
+        "prod_selling_price",
+        "discount",
+        "prod_media_id",
+      ],
+      where: { prod_id },
+    });
 
-    if (!exist) {
+    if (!exist.length) {
       return res.send({
         status: 0,
         message: "no product found",
       });
     }
 
+    console.log("exist....................", exist);
+
     const productDetails = {
-      prod_id: exist.prod_id,
-      prod_name: exist.prod_name,
-      prod_description: exist.prod_description,
-      prod_listing_price: exist.prod_listing_price,
-      prod_selling_price: exist.prod_selling_price,
-      discount: exist.discount,
-      prod_media_id: exist.prod_media_id,
+      ...exist
     };
 
     res.send({

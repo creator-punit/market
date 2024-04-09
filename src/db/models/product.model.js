@@ -51,6 +51,6 @@ const Product = sequelize.define(
   }
 );
 
-await Product.sync({force:true});
+await Product.sync();
 
 export { Product };
