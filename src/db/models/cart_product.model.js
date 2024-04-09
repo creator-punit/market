@@ -4,12 +4,15 @@ import { sequelize } from "../db-connect.js";
 const Cart = sequelize.define(
   "Cart",
   {
-    cart_id: {
+    cart_prod_id: {
       type: DataTypes.INTEGER,
       primaryKey: true,
     },
-    cart_prod_id: {
+    prod_id: {
       type: DataTypes.STRING,
+    },
+    prod_quantity: {
+      type: DataTypes.INTEGER,
     },
   },
   {
