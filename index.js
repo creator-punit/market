@@ -22,7 +22,8 @@ dbConnect();
 
 import {default as userRouter} from "./src/routes/user.route.js";
 import { default as productRouter } from "./src/routes/product.route.js";
-app.use("/api/v1", userRouter, productRouter);
+import { default as addressRouter } from "./src/routes/address.route.js";
+app.use("/api/v1", userRouter, productRouter, addressRouter);
 // app.use("/api/v1", productRouter);
 
 const port = process.env.PORT || 8000;

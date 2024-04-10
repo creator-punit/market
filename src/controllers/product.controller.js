@@ -18,33 +18,33 @@ const registerProduct = async (req, res) => {
       user_id,
     };
 
-    const addedProduct = await Product.create(productDetails);
+      const addedProduct = await Product.create(productDetails);
 
-    if (!addedProduct) {
-      return res.send({
-        status: 0,
-        message: "internal error adding product",
+      if (!addedProduct) {
+        return res.send({
+          status: 0,
+          message: "internal error adding product",
+        });
+      }
+
+      res.send({
+        status: 1,
+        message: "product successfully added",
       });
+    } catch (error) {
+      throw error;
     }
+  };
+  const getProduct = async (req, res) => {
+    try {
+      const { prod_id } = req.headers;
 
-    res.send({
-      status: 1,
-      message: "product successfully added",
-    });
-  } catch (error) {
-    throw error;
-  }
-};
-const getProduct = async (req, res) => {
-  try {
-    const { prod_id } = req.headers;
-
-    if (!prod_id) {
-      return res.send({
-        status: 0,
-        message: "no product id found",
-      });
-    }
+      if (!prod_id) {
+        return res.send({
+          status: 0,
+          message: "no product id found",
+        });
+      }
 
     const exist = await Product.findAll({
       attributes: ["prod_name", "prod_description", "user_id"],
@@ -62,46 +62,46 @@ const getProduct = async (req, res) => {
       ...exist,
     };
 
-    res.send({
-      status: 1,
-      productDetails,
-      message: "product details found successfully",
-    });
-  } catch (error) {
-    throw error;
-  }
-};
-
-const updateProduct = async (req, res) => {};
-
-const deleteProduct = async (req, res) => {
-  try {
-    const { prod_id } = req.headers;
-
-    if (!prod_id) {
-      return res.send({
-        status: 0,
-        message: "no product id found",
+      res.send({
+        status: 1,
+        productDetails,
+        message: "product details found successfully",
       });
+    } catch (error) {
+      throw error;
     }
+  };
 
-    const deletedProduct = await Product.destroy({ where: { prod_id } });
+  const updateProduct = async (req, res) => {};
 
-    if (!deletedProduct) {
-      return res.send({
-        status: 0,
-        message: "no product found",
+  const deleteProduct = async (req, res) => {
+    try {
+      const { prod_id } = req.headers;
+
+      if (!prod_id) {
+        return res.send({
+          status: 0,
+          message: "no product id found",
+        });
+      }
+
+      const deletedProduct = await Product.destroy({ where: { prod_id } });
+
+      if (!deletedProduct) {
+        return res.send({
+          status: 0,
+          message: "no product found",
+        });
+      }
+
+      res.send({
+        status: 1,
+        message: "product details deleted successfully",
       });
+    } catch (error) {
+      throw error;
     }
-
-    res.send({
-      status: 1,
-      message: "product details deleted successfully",
-    });
-  } catch (error) {
-    throw error;
-  }
-};
+  };
 
 const listProduct = async (req, res, next) => {
   try {
