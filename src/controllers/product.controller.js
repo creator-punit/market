@@ -143,6 +143,7 @@ const listProduct = async (req, res, next) => {
       prod_listing_price,
       prod_selling_price,
       quantity,
+      is_listed:true,
     };
 
     const listedProduct = await ProductListing.create(productListingDetails);
@@ -162,6 +163,53 @@ const listProduct = async (req, res, next) => {
     throw error;
   }
 };
+const unlistProduct = async (req, res, next) => {
+  try {
+    const {
+      listing_id
+    } = req.body;
+
+    if (!listing_id) {
+      return res.send({
+        status: 0,
+        message: "product listing id required",
+      });
+    }
+
+    const exist = await Product.findAll({
+      where: { prod_id },
+    });
+
+    if (!exist.lemgth) {
+      return res.send({
+        status: 0,
+        message: "product has has not been listed yet",
+      });
+    }
+
+    const productListingDetails = {
+      is_listed:false
+    };
+
+    const unlistedProduct = await ProductListing.update(productListingDetails, {
+      where: { prod_id },
+    });
+
+    if (!unlistedProduct) {
+      return res.send({
+        status: 0,
+        message: "Internal error! could not unlist product",
+      });
+    }
+
+    return res.send({
+      status: 1,
+      message: "Product successfully unlisted",
+    });
+  } catch (error) {
+    throw error;
+  }
+};
 
 export {
   registerProduct,
@@ -169,4 +217,5 @@ export {
   updateProduct,
   deleteProduct,
   listProduct,
+  unlistProduct,
 };

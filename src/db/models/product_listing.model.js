@@ -33,6 +33,10 @@ const ProductListing = sequelize.define(
       type: DataTypes.INTEGER,
       // allowNull: false,
     },
+    is_listed: {
+      type: DataTypes.BOOLEAN,
+      // allowNull: false,
+    },
   },
   {
     // Other model options go here
