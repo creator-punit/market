@@ -42,6 +42,9 @@ const User = sequelize.define(
       //   key: "history_id",
       // },
     },
+    profile_img: {
+      type: DataTypes.STRING,
+    },
   },
   {
     // Other model options go here
