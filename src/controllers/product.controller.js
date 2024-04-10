@@ -1,21 +1,11 @@
 import { Product } from "../db/models/product.model.js";
+import { ProductListing } from "../db/models/product_listing.model.js";
 
 const registerProduct = async (req, res) => {
   try {
-    const {
-      prod_name,
-      prod_description,
-      prod_listing_price,
-      prod_selling_price,
-    } = req.body;
-    const { user_id } = req.headers;
+    const { prod_name, prod_description, user_id } = req.body;
 
-    if (
-      !prod_name &&
-      !prod_description &&
-      !prod_listing_price &&
-      !prod_selling_price
-    ) {
+    if (!prod_name && !prod_description && !user_id) {
       return res.send({
         status: 0,
         message: "product details missing",
@@ -25,8 +15,6 @@ const registerProduct = async (req, res) => {
     const productDetails = {
       prod_name,
       prod_description,
-      prod_listing_price,
-      prod_selling_price,
       user_id,
     };
 
@@ -59,14 +47,7 @@ const getProduct = async (req, res) => {
     }
 
     const exist = await Product.findAll({
-      attributes: [
-        "prod_name",
-        "prod_description",
-        "prod_listing_price",
-        "prod_selling_price",
-        "discount",
-        "prod_media_id",
-      ],
+      attributes: ["prod_name", "prod_description", "user_id"],
       where: { prod_id },
     });
 
@@ -77,10 +58,8 @@ const getProduct = async (req, res) => {
       });
     }
 
-    console.log("exist....................", exist);
-
     const productDetails = {
-      ...exist
+      ...exist,
     };
 
     res.send({
@@ -124,4 +103,119 @@ const deleteProduct = async (req, res) => {
   }
 };
 
-export { registerProduct, getProduct, updateProduct, deleteProduct };
+const listProduct = async (req, res, next) => {
+  try {
+    const {
+      prod_id,
+      prod_name,
+      prod_listing_price,
+      prod_selling_price,
+      quantity,
+    } = req.body;
+
+    if (
+      !prod_name &&
+      !prod_id &&
+      !prod_listing_price &&
+      !prod_selling_price &&
+      !quantity
+    ) {
+      return res.send({
+        status: 0,
+        message: "product listing details missing",
+      });
+    }
+
+    const exist = await Product.findAll({
+      where: { prod_id },
+    });
+
+    if (exist.lemgth) {
+      return res.send({
+        status: 0,
+        message: "product has already been listed",
+      });
+    }
+
+    const productListingDetails = {
+      prod_id,
+      prod_name,
+      prod_listing_price,
+      prod_selling_price,
+      quantity,
+      is_listed:true,
+    };
+
+    const listedProduct = await ProductListing.create(productListingDetails);
+
+    if (!listedProduct) {
+      return res.send({
+        status: 0,
+        message: "Internal error! could not list product",
+      });
+    }
+
+    return res.send({
+      status: 1,
+      message: "Product successfully listed",
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+const unlistProduct = async (req, res, next) => {
+  try {
+    const {
+      listing_id
+    } = req.body;
+
+    if (!listing_id) {
+      return res.send({
+        status: 0,
+        message: "product listing id required",
+      });
+    }
+
+    const exist = await Product.findAll({
+      where: { prod_id },
+    });
+
+    if (!exist.lemgth) {
+      return res.send({
+        status: 0,
+        message: "product has has not been listed yet",
+      });
+    }
+
+    const productListingDetails = {
+      is_listed:false
+    };
+
+    const unlistedProduct = await ProductListing.update(productListingDetails, {
+      where: { prod_id },
+    });
+
+    if (!unlistedProduct) {
+      return res.send({
+        status: 0,
+        message: "Internal error! could not unlist product",
+      });
+    }
+
+    return res.send({
+      status: 1,
+      message: "Product successfully unlisted",
+    });
+  } catch (error) {
+    throw error;
+  }
+};
+
+export {
+  registerProduct,
+  getProduct,
+  updateProduct,
+  deleteProduct,
+  listProduct,
+  unlistProduct,
+};

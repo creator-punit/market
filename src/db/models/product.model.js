@@ -17,18 +17,6 @@ const Product = sequelize.define(
     prod_description: {
       type: DataTypes.TEXT,
     },
-    prod_listing_price: {
-      type: DataTypes.INTEGER,
-      // allowNull: false,
-    },
-    prod_selling_price: {
-      type: DataTypes.INTEGER,
-      // allowNull: false,
-    },
-    discount: {
-      type: DataTypes.INTEGER,
-      // allowNull: false,
-    },
     user_id: {
       type: DataTypes.INTEGER,
       references: {
@@ -36,12 +24,11 @@ const Product = sequelize.define(
         key: "user_id",
       },
     },
-    prod_media_id: {
-      type: DataTypes.STRING,
-      //   references: {
-      //     model: User,
-      //     key: "user_id",
-      //   },
+    prod_img: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
+    },
+    prod_vid: {
+      type: DataTypes.ARRAY(DataTypes.STRING),
     },
   },
   {
