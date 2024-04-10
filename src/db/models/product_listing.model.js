@@ -2,42 +2,41 @@ import { DataTypes } from "sequelize";
 import { sequelize } from "../db-connect.js";
 import { User } from "./user.model.js";
 
-const Product = sequelize.define(
-  "Product",
+const ProductListing = sequelize.define(
+  "ProductListing",
   {
-    prod_id: {
+    prod_listing_id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
       primaryKey: true,
+    },
+    prod_id: {
+      type: DataTypes.INTEGER,
     },
     prod_name: {
       type: DataTypes.STRING,
       // allowNull: false,
     },
-    prod_description: {
-      type: DataTypes.TEXT,
-    },
-    user_id: {
+    prod_listing_price: {
       type: DataTypes.INTEGER,
-      references: {
-        model: User,
-        key: "user_id",
-      },
+      // allowNull: false,
     },
-    prod_img: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+    prod_selling_price: {
+      type: DataTypes.INTEGER,
+      // allowNull: false,
     },
-    prod_vid: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+    discount: {
+      type: DataTypes.INTEGER,
+      // allowNull: false,
     },
   },
   {
     // Other model options go here
     timestamps: true,
-    id: "product_id",
+    id: "product_listing_id",
   }
 );
 
-await Product.sync();
+await ProductListing.sync();
 
-export { Product };
+export { ProductListing };
