@@ -12,5 +12,6 @@ router.route("/product").post(registerProduct);
 router.route("/product").put(updateProduct);
 router.route("/product").get(getProduct);
 router.route("/product").delete(deleteProduct);
+router.route("/product/list").post(listProduct);
 
 export default router;
