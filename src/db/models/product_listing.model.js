@@ -29,6 +29,10 @@ const ProductListing = sequelize.define(
       type: DataTypes.INTEGER,
       // allowNull: false,
     },
+    quantity: {
+      type: DataTypes.INTEGER,
+      // allowNull: false,
+    },
   },
   {
     // Other model options go here
