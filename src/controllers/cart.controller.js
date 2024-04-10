@@ -1,5 +1,4 @@
 import { Cart } from "../db/models/cart.model.js";
-import { CartProduct } from "../db/models/cart_product.model.js";
 import { Product } from "../db/models/product.model.js";
 
 const addToCart = async (req, res) => {
@@ -26,7 +25,7 @@ const addToCart = async (req, res) => {
       });
     }
 
-    const addedCartProduct = await Cart.create({ cart_prod_id });
+    const addedroduct = await Cart.create({ cart_prod_id });
 
     if (!addedCartProduct) {
       res.semd({
@@ -98,7 +97,7 @@ const getCartProducts = async () => {
     }
 
     const prod_id_array = await Cart.findAll({
-      attributes: ["cart_prod_id"],
+      attributes: ["prod_id"],
       where: { cart_id },
     });
 
@@ -109,11 +108,6 @@ const getCartProducts = async () => {
       });
     }
 
-    const cartProductIDs = await CartProduct.findAll({
-      attributes: ["cart_prod_id"],
-      where: { cart_prod_id: prod_id_array },
-    });
-
     const cartProductDetails = await Product.findAll({
       attributes: [
         "prod_name",
@@ -123,7 +117,7 @@ const getCartProducts = async () => {
         "discount",
         "prod_media_id",
       ],
-      where: { prod_id: cartProductIDs },
+      where: { prod_id: prod_id_array },
     });
 
     if (!cartProductDetails.length) {
