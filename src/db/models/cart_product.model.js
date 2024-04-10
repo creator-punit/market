@@ -1,8 +1,8 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../db-connect.js";
 
-const Cart = sequelize.define(
-  "Cart",
+const CartProduct = sequelize.define(
+  "CartProduct",
   {
     cart_prod_id: {
       type: DataTypes.INTEGER,
@@ -18,10 +18,10 @@ const Cart = sequelize.define(
   {
     // Other model options go here
     timestamps: true,
-    id: "cart_id",
+    id: "cart_prod_id",
   }
 );
 
-await Cart.sync();
+await CartProduct.sync();
 
-export { Cart };
+export { CartProduct };

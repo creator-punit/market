@@ -9,7 +9,7 @@ const Cart = sequelize.define(
       primaryKey: true,
     },
     cart_prod_id: {
-      type: DataTypes.STRING,
+      type: DataTypes.ARRAY(DataTypes.STRING)
     },
   },
   {
