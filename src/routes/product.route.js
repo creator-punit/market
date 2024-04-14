@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { upload } from "../utils/fileUpload/multer.js";
 import {
   registerProduct,
   updateProduct,
