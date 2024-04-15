@@ -1,5 +1,5 @@
 import { Strategy as JwtStrategy, ExtractJwt } from "passport-jwt";
-
+import { Strategy as GoogleStrategy } from "passport-google-oauth20";
 
 //JWT Strategy
 let options = {};
@@ -23,3 +23,18 @@ passport.use(
   })
 );
 
+//Google Strategy
+passport.use(
+  new GoogleStrategy(
+    {
+      clientID: process.env.CLIENTID,
+      clientSecret: process.env.CLIENT_SECRET,
+      callbackURL: process.env.CALLBACK_URL,
+    },
+    function (accessToken, refreshToken, profile, cb) {
+      User.findOrCreate({ googleId: profile.id }, function (err, user) {
+        return cb(err, user);
+      });
+    }
+  )
+);
