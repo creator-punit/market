@@ -1,58 +1,54 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../db-connect.js";
+import { User } from "./user.model.js";
 
-const User = sequelize.define(
-  "User",
+const Address = sequelize.define(
+  "Address",
   {
-    user_id: {
+    address_id: {
       type: DataTypes.INTEGER,
       autoIncrement: true,
-      primaryKey:true
+      primaryKey: true,
     },
-    firstname: {
+    add_firstname: {
       type: DataTypes.STRING,
       // allowNull: false,
     },
-    lastname: {
+    add_lastname: {
       type: DataTypes.STRING,
     },
-    phone: {
-      type: DataTypes.STRING,
-      // allowNull: false,
-    },
-    email: {
+    add_phone: {
       type: DataTypes.STRING,
       // allowNull: false,
     },
-    password: {
+    add_locality: {
       type: DataTypes.STRING,
       // allowNull: false,
     },
-    cart_id: {
+    add_street: {
       type: DataTypes.STRING,
-      // references: {
-      //   model: Cart,
-      //   key: "cart_id",
-      // },
+      // allowNull: false,
     },
-    history_id: {
+    add_city: {
       type: DataTypes.STRING,
-      // references: {
-      //   model: History,
-      //   key: "history_id",
-      // },
     },
-    profile_img: {
+    add_state: {
+      type: DataTypes.STRING,
+    },
+    add_landmark: {
+      type: DataTypes.STRING,
+    },
+    add_alt_phone: {
       type: DataTypes.STRING,
     },
   },
   {
     // Other model options go here
     timestamps: true,
-    id: "user_id",
+    id: "address_id",
   }
 );
 
-await User.sync();
+await Address.sync();
 
-export { User };
+export { Address };

@@ -5,6 +5,7 @@ import { User } from "../db/models/user.model.js";
 const registerUser = async (req, res) => {
 
   const { firstname, lastname, phone, email, password } = req.body;
+  console.log("files...........",req.files)
 
   if (!firstname && !lastname && !phone && !email && !password) {
     res.send({
