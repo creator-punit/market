@@ -3,6 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { dbConnect } from "./src/db/db-connect.js";
 import { Routing } from "./src/routes/routes.js";
+import { swagger } from "./swaggerDocs.js";
 
 dotenv.config({ path: "./.env" });
 
@@ -21,6 +22,7 @@ app.get("/", (req, res) => {
 
 dbConnect();
 Routing(app);
+swagger(app)
 
 // app.use("/api/v1",);
 // app.use("/api/v1", productRouter);
