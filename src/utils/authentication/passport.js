@@ -6,7 +6,7 @@ let options = {};
 options.jwtFromRequest = ExtractJwt.fromAuthHeaderAsBearerToken();
 options.secretOrKey = process.env.SECRET;
 
-passport.use(
+passport.use('jwt',
   new JwtStrategy(options, function (jwt_payload, done) {
     User.findOne({ id: jwt_payload.sub }, function (err, user) {
       if (err) {
@@ -24,7 +24,7 @@ passport.use(
 );
 
 //Google Strategy
-passport.use(
+passport.use('google',
   new GoogleStrategy(
     {
       clientID: process.env.CLIENTID,
