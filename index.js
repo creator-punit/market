@@ -3,7 +3,7 @@ import dotenv from "dotenv";
 import cors from "cors";
 import { dbConnect } from "./src/db/db-connect.js";
 import { Routing } from "./src/routes/routes.js";
-import { swagger } from "./swaggerDocs.js";
+import { swagger } from "./swaggerDoc.js";
 
 dotenv.config({ path: "./.env" });
 
