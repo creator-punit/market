@@ -1,5 +1,6 @@
 import { DataTypes } from "sequelize";
 import { sequelize } from "../db-connect.js";
+import { Cart } from "./cart.model.js";
 
 const User = sequelize.define(
   "User",
@@ -29,11 +30,11 @@ const User = sequelize.define(
       // allowNull: false,
     },
     cart_id: {
-      type: DataTypes.STRING,
-      // references: {
-      //   model: Cart,
-      //   key: "cart_id",
-      // },
+      type: DataTypes.INTEGER,
+      references: {
+        model: Cart,
+        key: "cart_id",
+      },
     },
     history_id: {
       type: DataTypes.STRING,

@@ -5,10 +5,11 @@ import { User } from "../db/models/user.model.js";
 const registerUser = async (req, res) => {
 
   const { firstname, lastname, phone, email, password } = req.body;
-  console.log("files...........",req.files)
+  console.log("files...........",req.body)
+  const  profile_img  = "req.file"
 
   if (!firstname && !lastname && !phone && !email && !password) {
-    res.send({
+    res.send({  
       status: 0,
       msg: "required credentials missing",
     });
@@ -34,6 +35,7 @@ const registerUser = async (req, res) => {
       phone,
       email,
       password: hash,
+      profile_img,
     };
     const createdUser = await User.create(user);
 
@@ -54,7 +56,7 @@ const registerUser = async (req, res) => {
 const loginUser = async (req, res) => {
   try {
     const { phone, email, password } = req.body;
-
+    console.log(req.body,"-----------")
     if (!phone && !email) {
       res.send({
         status: 0,
