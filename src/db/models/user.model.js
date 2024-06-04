@@ -24,7 +24,7 @@ const userSchema = new Schema(
       lowercase: true,
       trim: true,
     },
-    Phone: {
+    phone: {
       type: Number,
       required: true,
       unique: true,

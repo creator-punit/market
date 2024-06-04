@@ -3,6 +3,7 @@ import { User } from "../db/models/user.model.js";
 
 const registerUser = async (req, res) => {
   const { firstname, lastname, phone, email, password } = req.body;
+  console.log("files...........", req.body);
   console.log("files...........", req.files);
 
   if (!firstname && !lastname && !phone && !email && !password) {
@@ -11,12 +12,9 @@ const registerUser = async (req, res) => {
       msg: "required credentials missing",
     });
   }
-
-  const exist = await User.findAll({
-    where: {
-      [Op.or]: [{ email }, { phone }],
-    },
-  });
+  
+  const exist = await User.find({ $or: [{email}, {phone}] });
+  console.log(exist);
 
   if (exist.length) {
     res.send({
@@ -33,7 +31,7 @@ const registerUser = async (req, res) => {
     password,
   };
   const createdUser = await User.create(user);
-
+  console.log(createdUser);
   if (!createdUser) {
     res.status(500).send({
       status: 0,
@@ -45,7 +43,6 @@ const registerUser = async (req, res) => {
     status: 1,
     msg: "user successfully added",
   });
-
 };
 
 const loginUser = async (req, res) => {
