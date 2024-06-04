@@ -1,11 +1,8 @@
-import { Op } from "sequelize";
 import bcrypt from "bcrypt";
 import { User } from "../db/models/user.model.js";
 
 const registerUser = async (req, res) => {
-
   const { firstname, lastname, phone, email, password } = req.body;
-  console.log("files...........",req.files)
 
   if (!firstname && !lastname && !phone && !email && !password) {
     res.send({
@@ -14,11 +11,7 @@ const registerUser = async (req, res) => {
     });
   }
 
-  const exist = await User.findAll({
-    where: {
-      [Op.or]: [{ email }, { phone }],
-    },
-  });
+  const exist = await User.find({ $or: [{ email }, { phone }] });
 
   if (exist.length) {
     res.send({
@@ -27,23 +20,22 @@ const registerUser = async (req, res) => {
     });
   }
 
-  await bcrypt.hash(password, 10, async function (err, hash) {
-    const user = {
-      firstname,
-      lastname,
-      phone,
-      email,
-      password: hash,
-    };
-    const createdUser = await User.create(user);
+  const user = {
+    firstname,
+    lastname,
+    phone,
+    email,
+    password,
+  };
 
-    if (!createdUser) {
-      res.status(500).send({
-        status: 0,
-        msg: "failed to add user to database",
-      });
-    }
-  });
+  const createdUser = await User.create(user);
+
+  if (!createdUser) {
+    res.status(500).send({
+      status: 0,
+      msg: "failed to add user to database",
+    });
+  }
 
   res.send({
     status: 1,
@@ -74,7 +66,7 @@ const loginUser = async (req, res) => {
       };
     }
 
-    const exist = await User.findAll({ where });
+    const exist = await User.find(where);
 
     if (!exist.length) {
       res.send({
@@ -82,23 +74,26 @@ const loginUser = async (req, res) => {
         message: "No account exists with the given credentials",
       });
     }
-    const user = exist[0].dataValues;
+    const user = exist[0];
 
-    await bcrypt.compare(password, user.password, async function (err, result) {
-      if (!result) {
-        res.send({
-          status: 0,
-          message: "The entered password is incorrect",
-        });
-      }
-    });
+    const isPasswordCorrect = await user.isPasswordCorrect(password);
+
+    if (!isPasswordCorrect) {
+      res.send({
+        status: 0,
+        message: "entered password is incorrect",
+      });
+    }
+
+    const refreshToken = user.generateRefreshToken(exist._id);
 
     const userDetails = {
       name: user.firstname + " " + user.lastname,
       phone: user.phone,
       email: user.email,
-      cart: user.cart_id,
-      history: user.history_id,
+      refreshToken: refreshToken,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
     };
 
     res.send({
@@ -106,6 +101,7 @@ const loginUser = async (req, res) => {
       userDetails,
       message: "User is successfully loggedIn",
     });
+    
   } catch (error) {
     throw error;
   }

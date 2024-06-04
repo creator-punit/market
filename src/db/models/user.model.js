@@ -1,58 +1,84 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../db-connect.js";
+import { model, Schema } from "mongoose";
+import bcrypt from "bcrypt";
+import { generateJWT } from "../../utils/authentication/jwt.js";
 
-const User = sequelize.define(
-  "User",
+const userSchema = new Schema(
   {
-    user_id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey:true
-    },
     firstname: {
-      type: DataTypes.STRING,
-      // allowNull: false,
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
     },
     lastname: {
-      type: DataTypes.STRING,
-    },
-    phone: {
-      type: DataTypes.STRING,
-      // allowNull: false,
+      type: String,
+      required: true,
+      trim: true,
+      index: true,
     },
     email: {
-      type: DataTypes.STRING,
-      // allowNull: false,
+      type: String,
+      required: true,
+      unique: true,
+      lowercase: true,
+      trim: true,
+    },
+    phone: {
+      type: Number,
+      required: true,
+      unique: true,
     },
     password: {
-      type: DataTypes.STRING,
-      // allowNull: false,
-    },
-    cart_id: {
-      type: DataTypes.STRING,
-      // references: {
-      //   model: Cart,
-      //   key: "cart_id",
-      // },
-    },
-    history_id: {
-      type: DataTypes.STRING,
-      // references: {
-      //   model: History,
-      //   key: "history_id",
-      // },
+      type: String,
+      required: [true, "Password is required"],
     },
     profile_img: {
-      type: DataTypes.STRING,
+      type: String, //Cloudnary URL
     },
+    refreshToken: {
+      type: String,
+    },
+    // cartDetails: [
+    //   {
+    //     type: Schema.Types.ObjectId,
+    //     ref: "Video",
+    //   },
+    // ],
   },
   {
-    // Other model options go here
     timestamps: true,
-    id: "user_id",
   }
 );
 
-await User.sync();
+//A method--pre--from mongoose that runs a function just before an action---here the action is set to saving data.
+userSchema.pre("save", async function (next) {
+  //Above an arrow function is not used as it does not have access to 'this'
 
-export { User };
+  if (!this.isModified("password")) return next();
+
+  //bcrypt hash method with 10 iterations of its algorithm
+  this.password = await bcrypt.hash(this.password, 10);
+  next();
+});
+
+userSchema.methods.isPasswordCorrect = async function (password) {
+  return await bcrypt.compare(password, this.password);
+};
+
+userSchema.methods.generateAccessToken = function () {
+  return generateJWT({
+    _id: this._id,
+    email: this.email,
+    firstname: this.firstname,
+    lastname: this.lastname,
+  });
+};
+
+userSchema.methods.generateRefreshToken = function (payload) {
+  return generateJWT({
+    _id: this._id,
+  });
+};
+
+export const User = model("User", userSchema);

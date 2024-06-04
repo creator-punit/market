@@ -1,7 +1,7 @@
 import express from "express";
 import dotenv from "dotenv";
 import cors from "cors";
-import { dbConnect } from "./src/db/db-connect.js";
+import { connectDB } from "./src/db/db-connect.js";
 import { Routing } from "./src/routes/routes.js";
 import { swagger } from "./swaggerDoc.js";
 
@@ -15,12 +15,13 @@ app.use(
 );
 
 app.use(express.json());
+app.use(express.urlencoded())
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
 });
 
-dbConnect();
+connectDB();
 Routing(app);
 swagger(app)
 

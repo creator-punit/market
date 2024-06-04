@@ -1,23 +1,14 @@
-import { Sequelize } from "sequelize";
-import { dbConfig } from "../config/db_config.js";
-
-const sequelize = new Sequelize(
-  dbConfig.database,
-  dbConfig.user,
-  dbConfig.password,
-  {
-    host: dbConfig.host,
-    dialect: "postgres",
-  }
-);
-
-const dbConnect = async () => {
+import mongoose from "mongoose";
+const connectDB = async () => {
   try {
-    await sequelize.authenticate();
-    console.log("Connection has been established successfully.");
-  } catch (error) {
-    console.error("Unable to connect to the database:", error);
+    const connectionInstance = await mongoose.connect(
+      `${process.env.MONGODB_URI}bAAZAR`
+    );
+    console.log(`\n MongoDB connected !! DB HOST: ${connectionInstance}`);
+  } catch (err) {
+    console.error("MONGODB connection failed:", err);
+    throw err;
   }
 };
 
-export { dbConnect , sequelize};
+export { connectDB };
