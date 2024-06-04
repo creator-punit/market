@@ -12,9 +12,8 @@ const registerUser = async (req, res) => {
       msg: "required credentials missing",
     });
   }
-  
-  const exist = await User.find({ $or: [{email}, {phone}] });
-  console.log(exist);
+
+  const exist = await User.find({ $or: [{ email }, { phone }] });
 
   if (exist.length) {
     res.send({
@@ -31,7 +30,7 @@ const registerUser = async (req, res) => {
     password,
   };
   const createdUser = await User.create(user);
-  console.log(createdUser);
+
   if (!createdUser) {
     res.status(500).send({
       status: 0,
@@ -68,7 +67,7 @@ const loginUser = async (req, res) => {
       };
     }
 
-    const exist = await User.findAll({ where });
+    const exist = await User.find(where);
 
     if (!exist.length) {
       res.send({
@@ -76,23 +75,23 @@ const loginUser = async (req, res) => {
         message: "No account exists with the given credentials",
       });
     }
-    const user = exist[0].dataValues;
+    const user = exist[0];
 
-    await bcrypt.compare(password, user.password, async function (err, result) {
-      if (!result) {
-        res.send({
-          status: 0,
-          message: "The entered password is incorrect",
-        });
-      }
-    });
+    const isPasswordCorrect = await user.isPasswordCorrect(password);
+
+    if (!isPasswordCorrect) {
+      res.send({
+        status: 0,
+        message: "entered password is incorrect",
+      });
+    }
 
     const userDetails = {
       name: user.firstname + " " + user.lastname,
       phone: user.phone,
       email: user.email,
-      cart: user.cart_id,
-      history: user.history_id,
+      createdAt: user.createdAt,
+      updatedAt: user.updatedAt,
     };
 
     res.send({

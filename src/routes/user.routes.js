@@ -53,7 +53,7 @@ router.route("/").put(updateUser);
 
 /**
  * @swagger
- * /user/login:
+ * /api/v1/user/login:
  *  post:
  *    tags :
  *      - User
