@@ -1,43 +1,91 @@
-import { DataTypes } from "sequelize";
-import { sequelize } from "../db-connect.js";
-import { User } from "./user.model.js";
+import { model, Schema } from "mongoose";
 
-const Product = sequelize.define(
-  "Product",
+const ImageSchema = new Schema({
+  src: {
+    type: String,
+    required: true,
+  },
+  alt: {
+    type: String,
+    required: true,
+  },
+});
+
+const VideoSchema = new Schema({
+  src: {
+    type: String,
+    required: true,
+  },
+  alt: {
+    type: String,
+    required: true,
+  },
+});
+
+const SizeSchema = new Schema({
+  size: {
+    type: String,
+    required: true,
+  },
+  stock: {
+    type: Number,
+    required: true,
+  },
+});
+
+const ColorSchema = new Schema({
+  color: {
+    type: String,
+    required: true,
+  },
+  available: {
+    type: Boolean,
+    required: true,
+  },
+});
+
+const productSchema = new Schema(
   {
-    prod_id: {
-      type: DataTypes.INTEGER,
-      autoIncrement: true,
-      primaryKey: true,
-    },
     prod_name: {
-      type: DataTypes.STRING,
-      // allowNull: false,
+      type: String,
+      required: true,
     },
     prod_description: {
-      type: DataTypes.TEXT,
+      type: String,
+      required: true,
     },
-    user_id: {
-      type: DataTypes.INTEGER,
-      references: {
-        model: User,
-        key: "user_id",
-      },
+    prod_price: {
+      type: Number,
+      required: true,
     },
-    prod_img: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
+    prod_default_img: {
+      type: String,
+      required: true,
     },
-    prod_vid: {
-      type: DataTypes.ARRAY(DataTypes.STRING),
-    },
+    prod_media_imgs: [ImageSchema],
+    prod_media_vds: [VideoSchema],
+    prod_sizes: [SizeSchema],
+    prod_colors: [ColorSchema],
   },
   {
-    // Other model options go here
     timestamps: true,
-    id: "product_id",
   }
 );
 
-await Product.sync();
 
-export { Product };
+// //A method--pre--from mongoose that runs a function just before an action---here the action is set to saving data.
+// productSchema.pre("save", async function (next) {
+//   //Above an arrow function is not used as it does not have access to 'this'
+
+//   if (!this.isModified("password")) return next();
+
+//   //bcrypt hash method with 10 iterations of its algorithm
+//   this.password = await bcrypt.hash(this.password, 10);
+//   next();
+// });
+
+// productSchema.methods.isPasswordCorrect = async function (password) {
+//   return await bcrypt.compare(password, this.password);
+// };
+
+export const Product = model("Product", productSchema);
