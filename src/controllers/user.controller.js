@@ -3,8 +3,6 @@ import { User } from "../db/models/user.model.js";
 
 const registerUser = async (req, res) => {
   const { firstname, lastname, phone, email, password } = req.body;
-  console.log("files...........", req.body);
-  console.log("files...........", req.files);
 
   if (!firstname && !lastname && !phone && !email && !password) {
     res.send({
@@ -29,6 +27,7 @@ const registerUser = async (req, res) => {
     email,
     password,
   };
+
   const createdUser = await User.create(user);
 
   if (!createdUser) {
@@ -86,10 +85,13 @@ const loginUser = async (req, res) => {
       });
     }
 
+    const refreshToken = user.generateRefreshToken(exist._id);
+
     const userDetails = {
       name: user.firstname + " " + user.lastname,
       phone: user.phone,
       email: user.email,
+      refreshToken: refreshToken,
       createdAt: user.createdAt,
       updatedAt: user.updatedAt,
     };
@@ -99,6 +101,7 @@ const loginUser = async (req, res) => {
       userDetails,
       message: "User is successfully loggedIn",
     });
+    
   } catch (error) {
     throw error;
   }

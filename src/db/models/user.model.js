@@ -36,6 +36,9 @@ const userSchema = new Schema(
     profile_img: {
       type: String, //Cloudnary URL
     },
+    refreshToken: {
+      type: String,
+    },
     // cartDetails: [
     //   {
     //     type: Schema.Types.ObjectId,
@@ -72,16 +75,10 @@ userSchema.methods.generateAccessToken = function () {
   });
 };
 
-// userSchema.methods.generateRefreshToken = function (payload) {
-//   return jwt.sign(
-//     {
-//       _id: this._id,
-//     },
-//     process.env.JWT_REFRESH_TOKEN_SECRET,
-//     {
-//       expiresIn: process.env.JWT_REFRESH_TOKEN_EXPIRY,
-//     }
-//   );
-// };
+userSchema.methods.generateRefreshToken = function (payload) {
+  return generateJWT({
+    _id: this._id,
+  });
+};
 
 export const User = model("User", userSchema);
