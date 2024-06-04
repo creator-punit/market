@@ -21,12 +21,7 @@
     "nodemon": "^3.0.3",
     "passport-google-oauth20": "^2.0.0",
     "passport-jwt": "^4.0.1",
-    "pg": "^8.11.3",
-    "sequelize": "^6.36.0",
     "swagger-jsdoc": "^6.2.8",
     "swagger-ui-express": "^5.0.1"
-  },
-  "devDependencies": {
-    "sequelize-cli": "^6.6.2"
   }
 }

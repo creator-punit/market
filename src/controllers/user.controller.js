@@ -1,11 +1,9 @@
-import { Op } from "sequelize";
 import bcrypt from "bcrypt";
 import { User } from "../db/models/user.model.js";
 
 const registerUser = async (req, res) => {
-
   const { firstname, lastname, phone, email, password } = req.body;
-  console.log("files...........",req.files)
+  console.log("files...........", req.files);
 
   if (!firstname && !lastname && !phone && !email && !password) {
     res.send({
@@ -27,28 +25,27 @@ const registerUser = async (req, res) => {
     });
   }
 
-  await bcrypt.hash(password, 10, async function (err, hash) {
-    const user = {
-      firstname,
-      lastname,
-      phone,
-      email,
-      password: hash,
-    };
-    const createdUser = await User.create(user);
+  const user = {
+    firstname,
+    lastname,
+    phone,
+    email,
+    password,
+  };
+  const createdUser = await User.create(user);
 
-    if (!createdUser) {
-      res.status(500).send({
-        status: 0,
-        msg: "failed to add user to database",
-      });
-    }
-  });
+  if (!createdUser) {
+    res.status(500).send({
+      status: 0,
+      msg: "failed to add user to database",
+    });
+  }
 
   res.send({
     status: 1,
     msg: "user successfully added",
   });
+
 };
 
 const loginUser = async (req, res) => {
