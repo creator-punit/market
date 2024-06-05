@@ -1,10 +1,10 @@
 import { Product } from "../db/models/product.model.js";
 import { handleError } from "../utils/handler/error.handler.js";
 
-const registerProduct = (req, res, _next) => {
+const registerProduct = async (req, res, _next) => {
   try {
     const { prod_name, prod_description, prod_price } = req.body;
-    console.log(req.body, "--------------");
+
     const { _id: user_id } = req.user;
 
     if (!prod_name || !prod_description || !prod_price) {
@@ -23,10 +23,9 @@ const registerProduct = (req, res, _next) => {
       prod_price,
       prod_created_by: user_id,
     };
-    console.log(product, "----------");
 
-    const createdProduct = Product.create(product);
-
+    const createdProduct = await Product.create(product);
+    console.log(createdProduct);
     if (!createdProduct) {
       res.send(handleError());
     }

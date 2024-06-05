@@ -86,7 +86,7 @@ const loginUser = async (req, res) => {
       });
     }
 
-    const refreshToken = user.generateRefreshToken(exist._id);
+    const refreshToken = await user.generateRefreshToken(exist._id);
 
     const userDetails = {
       name: user.firstname + " " + user.lastname,
@@ -100,7 +100,7 @@ const loginUser = async (req, res) => {
       { refreshToken },
       { new: true, useFindAndModify: false }
     );
-    
+
     if (!updateTokenData) {
       res.send(handleError());
     }
