@@ -9,7 +9,7 @@ console.log(START_TIME);
 const swaggerDefinition = {
   info: {
     title: "bAZAAR_api_nodejs",
-    version: "1.0.0",
+    version: "2.0.0",
     description: `<h4>Last build: <b>${START_TIME}</b></h4>`,
   },
   servers: [

@@ -15,7 +15,7 @@ app.use(
 );
 
 app.use(express.json());
-app.use(express.urlencoded())
+app.use(express.urlencoded({ extended: true }));
 
 app.get("/", (req, res) => {
   res.send("Hello World!");
@@ -23,7 +23,7 @@ app.get("/", (req, res) => {
 
 connectDB();
 Routing(app);
-swagger(app)
+swagger(app);
 
 // app.use("/api/v1",);
 // app.use("/api/v1", productRouter);
