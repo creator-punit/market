@@ -1,5 +1,6 @@
 import bcrypt from "bcrypt";
 import { User } from "../db/models/user.model.js";
+import { handleError } from "../utils/handler/error.handler.js";
 
 const registerUser = async (req, res) => {
   const { firstname, lastname, phone, email, password } = req.body;
@@ -92,16 +93,22 @@ const loginUser = async (req, res) => {
       phone: user.phone,
       email: user.email,
       refreshToken: refreshToken,
-      createdAt: user.createdAt,
-      updatedAt: user.updatedAt,
     };
 
+    const updateTokenData = await User.findOneAndUpdate(
+      { _id: user._id },
+      { refreshToken },
+      { new: true, useFindAndModify: false }
+    );
+    
+    if (!updateTokenData) {
+      res.send(handleError());
+    }
     res.send({
       status: 1,
       userDetails,
       message: "User is successfully loggedIn",
     });
-    
   } catch (error) {
     throw error;
   }
