@@ -60,6 +60,9 @@ const productSchema = new Schema(
     },
     prod_default_img: {
       type: String,
+    },
+    prod_created_by: {
+      type: String,
       required: true,
     },
     prod_media_imgs: [ImageSchema],
@@ -71,7 +74,6 @@ const productSchema = new Schema(
     timestamps: true,
   }
 );
-
 
 // //A method--pre--from mongoose that runs a function just before an action---here the action is set to saving data.
 // productSchema.pre("save", async function (next) {
