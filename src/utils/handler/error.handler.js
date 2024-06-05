@@ -5,3 +5,5 @@ const handleError = ({ status, title, message }) => {
     message: message || "Error in processing request! Please try again later.",
   };
 };
+
+export { handleError };
