@@ -34,12 +34,38 @@ const router = Router();
  *        in: formData
  *        type: file
  *        required: false
+ *      - name: prod_media_imgs
+ *        description: array of product images, max 5 items
+ *        type: array
+ *        items:
+ *          type: file
+ *        required: false
+ *      - name: prod_media_vds
+ *        description: array of product videos, max 3 items
+ *        type: array
+ *        items:
+ *          type: file
+ *        required: false
  *      - name: prod_sizes
  *        description: prod_sizes
  *        type: array
  *        items:
  *          type: String
  *        required: false
+ *      - name: prod_colors
+ *        description: prod_colors
+ *        required: false
+ *        schema:
+ *          type: array
+ *          items:
+ *            type: object
+ *            properties:
+ *              imgs:
+ *                type: file
+ *                description: URL of the product image
+ *              alt:
+ *                type: string
+ *                description: alt text for images
  *      - name: prod_colors
  *        description: prod_colors
  *        in: formData
@@ -50,8 +76,15 @@ const router = Router();
  *       '500':
  *         description: server error
  */
-router
-  .route("/")
-  .post(tokenVerification, upload.single("prod_default_img"), registerProduct);
+
+router.route("/").post(
+  tokenVerification,
+  upload.fields([
+    { name: "prod_default_img", maxCount: 1 },
+    { name: "prod_media_imgs", maxCount: 5 },
+    { name: "prod_media_vds", maxCount: 3 },
+  ]),
+  registerProduct
+);
 
 export default router;
