@@ -1,9 +1,11 @@
 import bcrypt from "bcrypt";
 import { User } from "../db/models/user.model.js";
 import { handleError } from "../utils/handler/error.handler.js";
+import { uploadOnCloudinary } from "../utils/fileUpload/cloudinary.js";
 
 const registerUser = async (req, res) => {
   const { firstname, lastname, phone, email, password } = req.body;
+  const profileImg = req.file;
 
   if (!firstname && !lastname && !phone && !email && !password) {
     res.send({
@@ -21,12 +23,22 @@ const registerUser = async (req, res) => {
     });
   }
 
+  const profileUpload = await uploadOnCloudinary(profileImg.path);
+
+  if (!profileUpload) {
+    res.send({
+      status: 0,
+      msg: "profile image upload failed",
+    });
+  }
+
   const user = {
     firstname,
     lastname,
     phone,
     email,
     password,
+    profile_img: profileUpload,
   };
 
   const createdUser = await User.create(user);

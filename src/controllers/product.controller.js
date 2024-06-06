@@ -7,6 +7,8 @@ const registerProduct = async (req, res, _next) => {
 
     const { _id: user_id } = req.user;
 
+    console.log(req.file);
+
     if (!prod_name || !prod_description || !prod_price) {
       res.send(
         handleError({
