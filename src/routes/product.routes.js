@@ -1,5 +1,9 @@
 import { Router } from "express";
-import { registerProduct } from "../controllers/product.controller.js";
+import {
+  getProductDetail,
+  registerProduct,
+} from "../controllers/product.controller.js";
+import { passportAuthenticateJWT } from "../utils/authentication/passport.js";
 import { tokenVerification } from "../middleware/auth.middleware.js";
 import { upload } from "../utils/fileUpload/multer.js";
 
@@ -13,7 +17,7 @@ const router = Router();
  *      - Product
  *    summary: Create a new product
  *    parameters:
- *      - name: refreshToken
+ *      - name: Authorization
  *        description: refreshToken
  *        in: header
  *        required: true
@@ -86,5 +90,30 @@ router.route("/").post(
   ]),
   registerProduct
 );
+
+/**
+ * @swagger
+ * /api/v1/product/:
+ *  get:
+ *    tags :
+ *      - Product
+ *    summary: fetch product by id
+ *    parameters:
+ *      - name: Authorization
+ *        description: accessToken
+ *        in: header
+ *        required: true
+ *      - name: prod_id
+ *        description: prod_id
+ *        in: formData
+ *        required: true
+ *    responses:
+ *       '200':
+ *         description: added successfully
+ *       '500':
+ *         description: server error
+ */
+
+router.route("/").get(passportAuthenticateJWT(), getProductDetail);
 
 export default router;

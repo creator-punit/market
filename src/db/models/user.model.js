@@ -66,18 +66,27 @@ userSchema.methods.isPasswordCorrect = async function (password) {
 };
 
 userSchema.methods.generateAccessToken = function () {
-  return generateJWT({
-    _id: this._id,
-    email: this.email,
-    firstname: this.firstname,
-    lastname: this.lastname,
-  });
+  return generateJWT(
+    {
+      _id: this._id,
+      email: this.email,
+      phone: this.phone,
+      firstname: this.firstname,
+      lastname: this.lastname,
+    },
+    process.env.JWT_ACCESS_TOKEN_SECRET,
+    process.env.JWT_ACCESS_TOKEN_EXPIRY
+  );
 };
 
 userSchema.methods.generateRefreshToken = function (payload) {
-  return generateJWT({
-    _id: this._id,
-  });
+  return generateJWT(
+    {
+      _id: this._id,
+    },
+    process.env.JWT_REFRESH_TOKEN_SECRET,
+    process.env.JWT_REFRESH_TOKEN_EXPIRY
+  );
 };
 
 export const User = model("User", userSchema);

@@ -23,7 +23,6 @@ const tokenVerification = async (req, res, next) => {
         message: "invalid user token!",
       });
     }
-    req.user = user;
     next();
   } catch (error) {
     console.error("Error finding user with refresh token:", error);

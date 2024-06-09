@@ -87,6 +87,7 @@ const loginUser = async (req, res) => {
     }
 
     const refreshToken = await user.generateRefreshToken(exist._id);
+    const accessToken = await user.generateAccessToken(exist);
 
     const userDetails = {
       name: user.firstname + " " + user.lastname,
@@ -106,7 +107,8 @@ const loginUser = async (req, res) => {
     }
     res.send({
       status: 1,
-      userDetails,
+      data: userDetails,
+      token: accessToken,
       message: "User is successfully loggedIn",
     });
   } catch (error) {
