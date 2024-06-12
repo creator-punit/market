@@ -6,7 +6,7 @@ import { uploadOnCloudinary } from "../utils/fileUpload/cloudinary.js";
 const registerUser = async (req, res) => {
   const { firstname, lastname, phone, email, password } = req.body;
   const profileImg = req.file;
-
+console.log(firstname, lastname, phone, email, password);
   if (!firstname && !lastname && !phone && !email && !password) {
     res.send({
       status: 0,
